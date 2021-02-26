@@ -8,8 +8,8 @@ A carpooling app for students at Habib University
 
 Collaborators:
 
-Syed Hammad Ali (AliSyedHammad)
-Muhammad Sabihul Hasan (m-sabihul-hasan)
-Salman Muhammad Younus (BatBlob)
-Sarrah ()
-Uzair Ahmed Khoso (uk04348)
+1. Syed Hammad Ali (AliSyedHammad)
+2. Muhammad Sabihul Hasan (m-sabihul-hasan)
+3. Salman Muhammad Younus (BatBlob)
+4. Sarrah ()
+5. Uzair Ahmed Khoso (uk04348)
