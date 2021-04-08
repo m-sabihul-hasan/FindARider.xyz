@@ -17,6 +17,7 @@ class Body extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
+            SizedBox(height: size.height * 0.1),
             Text("Login",
                 style: GoogleFonts.yellowtail(
                   textStyle:
@@ -64,6 +65,26 @@ class Body extends StatelessWidget {
                   MaterialPageRoute(
                     builder: (context) {
                       return LoginScreen();
+                    },
+                  ),
+                );
+              },
+            ),
+            SizedBox(height: size.height * 0.25),
+            RoundedButton(
+              text: Text(
+                "Signup using student email",
+                style:
+                    TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+              ),
+              color: button_text,
+              textColor: Colors.black,
+              press: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) {
+                      return SignUpScreen();
                     },
                   ),
                 );
