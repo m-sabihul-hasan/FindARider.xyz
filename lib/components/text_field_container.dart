@@ -3,9 +3,11 @@ import 'package:flutter_app/constants.dart';
 
 class TextFieldContainer extends StatelessWidget {
   final Widget child;
+  final double width;
   const TextFieldContainer({
     Key key,
     this.child,
+    this.width,
   }) : super(key: key);
 
   @override
@@ -14,7 +16,7 @@ class TextFieldContainer extends StatelessWidget {
     return Container(
       margin: EdgeInsets.symmetric(vertical: 10),
       padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-      width: size.width * 0.6,
+      width: size.width * width,
       decoration: BoxDecoration(
         color: button_text,
         borderRadius: BorderRadius.circular(29),

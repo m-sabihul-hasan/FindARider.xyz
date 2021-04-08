@@ -34,11 +34,17 @@ class Body extends StatelessWidget {
               onChanged: (value) {},
               icon: null,
             ),
-            RoundedInputField(
-              hintText: "Your Email",
-              onChanged: (value) {},
-              icon: null,
-            ),
+            Row(mainAxisAlignment: MainAxisAlignment.start, children: [
+              SizedBox(width: size.width * 0.2),
+              Container(
+                  child: RoundedInputField(
+                hintText: "Email",
+                onChanged: (value) {},
+                icon: null,
+                width: 0.35,
+              )),
+              Text("@st.habib.edu.pk", style: TextStyle(fontSize: 20)),
+            ]),
             RoundedInputField(
               hintText: "Mobile no.",
               onChanged: (value) {},
