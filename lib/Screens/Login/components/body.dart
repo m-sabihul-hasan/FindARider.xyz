@@ -1,18 +1,34 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/Screens/Login/components/background.dart';
+import 'package:flutter_app/Screens/Home/home_screen.dart';
 import 'package:flutter_app/Screens/Signup/signup_screen.dart';
 import 'package:flutter_app/components/already_have_an_account_acheck.dart';
 import 'package:flutter_app/components/rounded_button.dart';
 import 'package:flutter_app/components/rounded_input_field.dart';
 import 'package:flutter_app/components/rounded_password_field.dart';
+import 'package:flutter_app/Screens/Login/login_screen.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class Body extends StatelessWidget {
+class Body extends StatefulWidget {
   const Body({
     Key key,
   }) : super(key: key);
 
+  @override
+  _BodyState createState() => _BodyState();
+}
+
+class _BodyState extends State<Body> {
+  String pie = "";
+
+  Color pie_color;
+
+  String email = "";
+
+  String password = "";
+
+  String login_return;
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -34,11 +50,15 @@ class Body extends StatelessWidget {
             SizedBox(height: size.height * 0.03),
             RoundedInputField(
               hintText: "Your Email",
-              onChanged: (value) {},
+              onChanged: (value) {
+                email = value;
+              },
             ),
             RoundedPasswordField(
               hintText: "Password",
-              onChanged: (value) {},
+              onChanged: (value) {
+                password = value;
+              },
             ),
             RoundedButton(
               text: Text(
@@ -46,8 +66,28 @@ class Body extends StatelessWidget {
                 style:
                     TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
               ),
-              press: () {},
+              press: () async {
+                String login_return = await login(email, password);
+                setState(() {
+                  if (login_return == "false") {
+                    this.pie_color = Colors.red;
+                    this.pie = "Incorrect Username/Password combination.";
+                  } else {
+                    this.pie_color = Colors.green;
+                    this.pie = "Login Successful!";
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) {
+                          return HomeScreen();
+                        },
+                      ),
+                    );
+                  }
+                });
+              },
             ),
+            Text(pie, style: TextStyle(color: pie_color)),
             SizedBox(height: size.height * 0.03),
             AlreadyHaveAnAccountCheck(
               press: () {

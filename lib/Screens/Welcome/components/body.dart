@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/Screens/Login/login_screen.dart';
 import 'package:flutter_app/Screens/Signup/signup_screen.dart';
+import 'package:flutter_app/Screens/Chat/chat_screen.dart';
 import 'package:flutter_app/Screens/Welcome/components/background.dart';
 import 'package:flutter_app/components/rounded_button.dart';
 import 'package:flutter_app/constants.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter_app/main.dart';
 
 class Body extends StatelessWidget {
   @override
@@ -65,6 +67,25 @@ class Body extends StatelessWidget {
                   MaterialPageRoute(
                     builder: (context) {
                       return LoginScreen();
+                    },
+                  ),
+                );
+              },
+            ),
+            RoundedButton(
+              text: Text(
+                "chat (broken)",
+                style:
+                    TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+              ),
+              color: button_text,
+              textColor: Colors.black,
+              press: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) {
+                      return ChatScreen();
                     },
                   ),
                 );
