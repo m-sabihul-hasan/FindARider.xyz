@@ -11,7 +11,7 @@ const app = express();
 const server = http.createServer(app);
 const io = socketio(server,{
     cors: {
-            origin: "http://localhost:49332",
+            origin: "*",
             methods: ["GET", "POST"],
             credentials: true,
             transports: ['websocket', 'polling'],
@@ -24,7 +24,10 @@ app.use(bodyParser.json());
 
 const PORT = process.env.PORT || 3000
 
-users = {};
+users = {
+            '1':{username:'1',mobile:'1',password:'1'},
+            '2':{username:'2',mobile:'2',password:'2'}
+        };
 
 app.get('/', (req, res) => res.send('hello!'));
 
@@ -60,11 +63,16 @@ function confirm_unique(user)
 
 app.post('/login', (req, res, next) => {
     res.status(200);
-    if (req.body['email'] in users && users[req.body['email']]['password'] == req.body['password'])
-        res.send('true');
+    if (req.body['email'] in users && users[req.body['email']]['password'] == req.body['password']) 
+    {
+        // console.log(users.body['email']['username']);
+        res.send(users[req.body['email']]['username']);
+    }
     else
         res.send('false');
 });
+
+connected_users = {};
 
 io.on('connection', socket => {
     //Get the chatID of the user and join in a room of the same chatID
@@ -75,12 +83,21 @@ io.on('connection', socket => {
     //Leave the room if the user closes the socket
     socket.on('disconnect', () => {
         console.log("disconnected", socket.id);
+        delete connected_users[socket.id];
+    })
+
+    socket.on('username', username => {
+        username = JSON.parse(username);
+        console.log(username);
+        connected_users[socket.id] = {};
+        connected_users[socket.id]["username"] = username["username"];
+        connected_users[socket.id]["userType"] = username["userType"];
     })
 
     //Send message to only a particular user
     socket.on("message", message => {
-        console.log(message);
-        io.in('room 1').emit("recieveMessage", message);
+        console.log(message, connected_users);
+        io.in('room 1').emit("recieveMessage", JSON.stringify({username: connected_users[socket.id]["username"], message: message, userType: connected_users[socket.id]["userType"]}));
         // socket.emit('recieveMessage', message);
         // //Send message to only that particular room
         // socket.in(receiverChatID).emit('receive_message', {

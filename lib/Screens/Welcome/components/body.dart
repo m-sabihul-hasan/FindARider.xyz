@@ -40,6 +40,7 @@ class Body extends StatelessWidget {
                         fontWeight: FontWeight.bold),
                   )),
               press: () {
+                user = "Driver";
                 Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -62,6 +63,7 @@ class Body extends StatelessWidget {
               color: button_text,
               textColor: Colors.black,
               press: () {
+                user = "Passenger";
                 Navigator.push(
                   context,
                   MaterialPageRoute(

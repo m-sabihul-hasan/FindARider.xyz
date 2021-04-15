@@ -30,6 +30,7 @@ dependencies:
   socket_io: ^0.9.0+2
   flutter_socket_io: ^0.6.0
   scoped_model: ^1.1.0
+  flutter_chat_bubble: ^1.0.2
 
 dev_dependencies:
   flutter_test:

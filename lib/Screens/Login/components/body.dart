@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app/constants.dart';
 import 'package:flutter_app/Screens/Login/components/background.dart';
 import 'package:flutter_app/Screens/Home/home_screen.dart';
 import 'package:flutter_app/Screens/Signup/signup_screen.dart';
@@ -75,6 +76,7 @@ class _BodyState extends State<Body> {
                   } else {
                     this.pie_color = Colors.green;
                     this.pie = "Login Successful!";
+                    finalUsername = login_return;
                     Navigator.push(
                       context,
                       MaterialPageRoute(

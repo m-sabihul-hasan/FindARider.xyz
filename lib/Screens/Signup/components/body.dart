@@ -12,6 +12,7 @@ import 'package:flutter_app/components/rounded_limited_input_field.dart';
 import 'package:flutter_app/components/rounded_limited_number_field.dart';
 import 'package:flutter_app/components/rounded_password_field.dart';
 import 'package:flutter_app/components/rounded_text_formfield.dart';
+import 'package:flutter_app/constants.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -124,6 +125,7 @@ class _BodyState extends State<Body> {
                   } else {
                     this.pie_color = Colors.green;
                     this.pie = "Registration Successful!";
+                    finalUsername = username;
                     Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => HomeScreen()),

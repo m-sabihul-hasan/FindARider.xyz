@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app/Screens/Login/login_screen.dart';
 import 'package:flutter_app/Screens/Signup/signup_screen.dart';
 import 'package:flutter_app/Screens/Home/components/background.dart';
-
+import 'package:flutter_app/Screens/Chat/chat_screen.dart';
 import 'package:flutter_app/components/rounded_button.dart';
 import 'package:flutter_app/constants.dart';
 import 'package:flutter_svg/svg.dart';
@@ -38,7 +38,16 @@ class Body extends StatelessWidget {
                         fontSize: 40,
                         fontWeight: FontWeight.bold),
                   )),
-              press: () {},
+              press: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) {
+                      return ChatScreen();
+                    },
+                  ),
+                );
+              },
             ),
             // SizedBox(height: size.height * 0.05),
             // RoundedButton(
