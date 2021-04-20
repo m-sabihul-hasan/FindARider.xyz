@@ -74,25 +74,25 @@ class Body extends StatelessWidget {
                 );
               },
             ),
-            RoundedButton(
-              text: Text(
-                "chat (broken)",
-                style:
-                    TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
-              ),
-              color: button_text,
-              textColor: Colors.black,
-              press: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) {
-                      return ChatScreen();
-                    },
-                  ),
-                );
-              },
-            ),
+            // RoundedButton(
+            //   text: Text(
+            //     "chat (broken)",
+            //     style:
+            //         TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+            //   ),
+            //   color: button_text,
+            //   textColor: Colors.black,
+            //   press: () {
+            //     Navigator.push(
+            //       context,
+            //       MaterialPageRoute(
+            //         builder: (context) {
+            //           return ChatScreen();
+            //         },
+            //       ),
+            //     );
+            //   },
+            // ),
             SizedBox(height: size.height * 0.25),
             RoundedButton(
               text: Text(
