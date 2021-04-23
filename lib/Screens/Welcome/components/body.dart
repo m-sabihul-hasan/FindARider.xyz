@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/Screens/Login/login_screen.dart';
+import 'package:flutter_app/Screens/PassengerHome/passengerhome_screen.dart';
+import 'package:flutter_app/Screens/DriverHome/driverhome_screen.dart';
 import 'package:flutter_app/Screens/Signup/signup_screen.dart';
 import 'package:flutter_app/Screens/Chat/chat_screen.dart';
 import 'package:flutter_app/Screens/Welcome/components/background.dart';
@@ -74,25 +76,44 @@ class Body extends StatelessWidget {
                 );
               },
             ),
-            // RoundedButton(
-            //   text: Text(
-            //     "chat (broken)",
-            //     style:
-            //         TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
-            //   ),
-            //   color: button_text,
-            //   textColor: Colors.black,
-            //   press: () {
-            //     Navigator.push(
-            //       context,
-            //       MaterialPageRoute(
-            //         builder: (context) {
-            //           return ChatScreen();
-            //         },
-            //       ),
-            //     );
-            //   },
-            // ),
+            RoundedButton(
+              text: Text(
+                "passenger home",
+                style:
+                    TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+              ),
+              color: button_text,
+              textColor: Colors.black,
+              press: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) {
+                      return PassengerHome();
+                    },
+                  ),
+                );
+              },
+            ),
+            RoundedButton(
+              text: Text(
+                "driver home",
+                style:
+                    TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+              ),
+              color: button_text,
+              textColor: Colors.black,
+              press: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) {
+                      return DriverHome();
+                    },
+                  ),
+                );
+              },
+            ),
             SizedBox(height: size.height * 0.25),
             RoundedButton(
               text: Text(
