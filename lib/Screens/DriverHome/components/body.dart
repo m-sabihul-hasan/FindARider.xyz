@@ -13,6 +13,7 @@ class Body extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+    userType = "D";
     // This size provide us total height and width of our screen
     return Background(
       child: SingleChildScrollView(

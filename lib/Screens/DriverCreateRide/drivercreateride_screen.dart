@@ -13,7 +13,19 @@ class DriverCreateRide extends StatelessWidget {
   }
 }
 
-createRide(startLocation, destination, car, licenseNumber, space) async {
+createRide(startLocation, destination, car, licenseNumber, space, fare, time,
+    date) async {
+  List empty = [];
+  if (startLocation == "") empty.add('Start Location');
+  if (destination == "") empty.add('Destination');
+  if (car == "") empty.add('Car');
+  if (space == 0 || space > 4) empty.add('Space');
+  if (licenseNumber.length < 6) empty.add('License Number');
+  if (fare == "") empty.add('Fare');
+  if (time == "") empty.add('Time');
+  if (date == "") empty.add('Date');
+  if (empty.length > 0) return [empty, []];
+
   var res = await http.post(
     Uri.http("localhost:3000", "/createride"),
     headers: <String, String>{
@@ -24,19 +36,44 @@ createRide(startLocation, destination, car, licenseNumber, space) async {
       'destination': destination,
       'car': car,
       'licenseNumber': licenseNumber,
-      'space': space,
+      'space': space.toString(),
+      'fare': fare.toString(),
+      'time': time,
+      'date': date,
+      'driver': finalUsername,
+      'passenger1': 'None',
+      'passenger2': 'None',
+      'passenger3': 'None',
+      'passenger4': 'None',
     }),
   );
   // Future.delayed(Duration(seconds: 2), () => print(res));
 
-  var to_check = json.decode(res.body);
-  List toShow = [];
-  if (to_check['username'] == true) toShow.add('Username');
-  if (to_check['email'] == true) toShow.add('Email');
-  if (to_check['mobile'] == true) toShow.add('Mobile no.');
-  String toShow_string = toShow.join(", ");
-  // print(toShow_string);
-  return toShow_string;
+  // var to_check = json.decode(res.body);
+  // List toShow = [];
+  // if (to_check['username'] == true) toShow.add('Username');
+  // if (to_check['email'] == true) toShow.add('Email');
+  // if (to_check['mobile'] == true) toShow.add('Mobile no.');
+  // String toShow_string = toShow.join(", ");
+  // print(toShow_string);g
+  bookedTripDetails = {
+    'startLocation': startLocation,
+    'destination': destination,
+    'car': car,
+    'licenseNumber': licenseNumber,
+    'space': space.toString(),
+    'fare': fare.toString(),
+    'time': time,
+    'date': date,
+    'driver': finalUsername,
+    'tripID': res.body,
+    'passenger1': 'None',
+    'passenger2': 'None',
+    'passenger3': 'None',
+    'passenger4': 'None',
+  };
+
+  return [[], res.body];
 }
 
 // if (response.statusCode == 201) {

@@ -29,6 +29,32 @@ users = {
             '2':{username:'2',mobile:'2',password:'2'}
         };
 
+rides = {
+    '01': {
+      startLocation: "import 'package:flutter_app/Screens/ListRoutes/listroutes_screen.dart';",
+      destination: "import 'package:flutter_app/Screens/ListRoutes/listroutes_screen.dart';",
+      car: 'awewq4',
+      licenseNumber: 'asdsare',
+      space: '2',
+      fare: '35',
+      time: '23:08',
+      date: '4/24',
+      driver: 'asd'
+    },
+    '02': {
+      startLocation: 'i like to move it move it i like to move it move it i like to move it move it i like to move it move it i like to move it move it i like to move it move it i like to move it move it i like to move it move it i like to move it move it i like to move it move it i like to move it move it i like to move it move it i like to move it move it i like to move it move it ',
+      destination: 'i like to move it move it i like to move it move it i like to move it move it i like to move it move it i like to move it move it not',
+      car: 'Cultus',
+      licenseNumber: 'weo9rpw',
+      space: '1',
+      fare: '2',
+      time: '23:09',
+      date: '4/24',
+      driver: 'asd'
+    }
+  };
+var ride_count = rides.length;
+
 app.get('/', (req, res) => res.send('hello!'));
 
 app.post('/signup', (req, res, next) => {
@@ -70,6 +96,36 @@ app.post('/login', (req, res, next) => {
     }
     else
         res.send('false');
+});
+
+app.post('/createride', (req, res, next) => {
+    res.status(200);
+    // console.log(users.body['email']['username']);
+    ride_count += 1;
+    trip_id = ride_count.toString();
+    trip_id = (5-trip_id.length)*"0" + trip_id;
+    // console.log(req.body);
+    rides[trip_id] = {};
+    for (const property in req.body) {
+        rides[trip_id][property] = req.body[property];
+    }
+    console.log(trip_id);
+    res.send(trip_id);
+});
+
+app.post('/listrides', (req, res, next) => {
+    res.status(200);
+    // console.log(users.body['email']['username']);
+    // ride_count += 1;
+    // trip_id = ride_count.toString();
+    // trip_id = (5-trip_id.length)*"0" + trip_id;
+    // console.log(req.body);
+    // rides[trip_id] = {};
+    // for (const property in req.body) {
+        // rides[trip_id][property] = req.body[property];
+    // }
+    console.log(rides);
+    res.send(rides);
 });
 
 connected_users = {};

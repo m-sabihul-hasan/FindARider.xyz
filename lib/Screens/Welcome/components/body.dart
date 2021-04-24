@@ -4,6 +4,7 @@ import 'package:flutter_app/Screens/PassengerHome/passengerhome_screen.dart';
 import 'package:flutter_app/Screens/DriverHome/driverhome_screen.dart';
 import 'package:flutter_app/Screens/Signup/signup_screen.dart';
 import 'package:flutter_app/Screens/Chat/chat_screen.dart';
+import 'package:flutter_app/Screens/TripDetails/tripdetails_screen.dart';
 import 'package:flutter_app/Screens/Welcome/components/background.dart';
 import 'package:flutter_app/components/rounded_button.dart';
 import 'package:flutter_app/constants.dart';
@@ -109,6 +110,25 @@ class Body extends StatelessWidget {
                   MaterialPageRoute(
                     builder: (context) {
                       return DriverHome();
+                    },
+                  ),
+                );
+              },
+            ),
+            RoundedButton(
+              text: Text(
+                "trip details",
+                style:
+                    TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+              ),
+              color: button_text,
+              textColor: Colors.black,
+              press: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) {
+                      return TripDetails();
                     },
                   ),
                 );

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app/Screens/ListRoutes/listroutes_screen.dart';
 // import 'package:flutter_app/Screens/Login/login_screen.dart';
 // import 'package:flutter_app/Screens/Signup/signup_screen.dart';
 import 'package:flutter_app/Screens/PassengerHome/components/background.dart';
@@ -11,6 +12,7 @@ import 'package:google_fonts/google_fonts.dart';
 class Body extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    userType = "P";
     Size size = MediaQuery.of(context).size;
     // This size provide us total height and width of our screen
     return Background(
@@ -53,16 +55,16 @@ class Body extends StatelessWidget {
                     fontSize: 30,
                     fontWeight: FontWeight.w200),
               ),
-              // press: () {
-              //   Navigator.push(
-              //     context,
-              //     MaterialPageRoute(
-              //       builder: (context) {
-              //         return ChatScreen();
-              //       },
-              //     ),
-              //   );
-              // },
+              press: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) {
+                      return ListRoutes();
+                    },
+                  ),
+                );
+              },
             ),
             Divider(
               color: Colors.black,

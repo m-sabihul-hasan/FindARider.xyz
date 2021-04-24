@@ -5,16 +5,13 @@ import 'package:flutter_app/Screens/Signup/components/background.dart';
 import 'package:flutter_app/Screens/Signup/components/or_divider.dart';
 import 'package:flutter_app/Screens/Signup/components/social_icon.dart';
 import 'package:flutter_app/Screens/DriverCreateRide/drivercreateride_screen.dart';
+import 'package:flutter_app/Screens/TripDetails/tripdetails_screen.dart';
 import 'package:flutter_app/components/already_have_an_account_acheck.dart';
 import 'package:flutter_app/components/rounded_button.dart';
 import 'package:flutter_app/components/rounded_input_field.dart';
 import 'package:flutter_app/components/rounded_limited_input_field.dart';
 import 'package:flutter_app/components/rounded_limited_number_field.dart';
-import 'package:flutter_app/components/rounded_password_field.dart';
-import 'package:flutter_app/components/rounded_text_formfield.dart';
-import 'package:flutter_app/constants.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 
 class Body extends StatefulWidget {
   @override
@@ -33,6 +30,12 @@ class _BodyState extends State<Body> {
   int space = 0;
 
   String pie = "";
+
+  String fare = "";
+
+  String time = "";
+
+  String date = "";
 
   Color pie_color;
 
@@ -90,6 +93,36 @@ class _BodyState extends State<Body> {
               icon: null,
               length: 2,
             ),
+            RoundedNumberField(
+              hintText: "Fare",
+              onChanged: (value) {
+                fare = value;
+              },
+              icon: null,
+            ),
+            // Container(child: ,)
+            SizedBox(height: size.height * 0.02),
+            BasicTimeField(
+              width: 360,
+              format: DateFormat("HH:mm"),
+              onChanged: (value) {
+                if (value != null)
+                  time = DateFormat.Hm().format(value).toString();
+                else
+                  time = "";
+              },
+            ),
+            SizedBox(height: size.height * 0.035),
+            BasicDateField(
+              width: 360,
+              format: DateFormat("yyyy-MM-dd"),
+              onChanged: (value) {
+                if (value != null)
+                  date = DateFormat.Md().format(value).toString();
+                else
+                  date = "";
+              },
+            ),
             SizedBox(height: size.height * 0.05),
             RoundedButton(
               text: Text(
@@ -98,19 +131,38 @@ class _BodyState extends State<Body> {
                     TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
               ),
               press: () async {
-                String unique = await createRide(
-                    startLocation, destination, car, licenseNumber, space);
+                List createRideReturn = await createRide(startLocation,
+                    destination, car, licenseNumber, space, fare, time, date);
                 setState(() {
-                  if (unique.isNotEmpty) {
+                  List createRideErrors = createRideReturn[0];
+                  if (createRideErrors.length > 0) {
+                    String space_error = "";
+                    String license_error = "";
+                    if (createRideErrors.contains('Space')) {
+                      space_error =
+                          "Space cannot be empty and must be greater than 0 and lesser than 5.";
+                      createRideErrors.remove('Space');
+                    }
+                    if (createRideErrors.contains('License Number')) {
+                      license_error =
+                          "License Number must contain atleast 6 characters.\n\n";
+                      createRideErrors.remove('License Number');
+                    }
                     this.pie_color = Colors.red;
-                    this.pie = "";
+                    String createRideFixes = "";
+                    if (createRideErrors.isNotEmpty)
+                      createRideFixes =
+                          createRideErrors.join(", ") + " cannot be empty.\n\n";
+                    this.pie =
+                        "${createRideFixes}${license_error}${space_error}";
                   } else {
                     this.pie_color = Colors.green;
-                    this.pie = "Ride created succcesfully!";
+                    this.pie =
+                        "Ride created successfully!\n"; //${createRideReturn[1]}";
                     // finalUsername = username;
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => HomeScreen()),
+                      MaterialPageRoute(builder: (context) => TripDetails()),
                     );
                   }
                 });
@@ -118,19 +170,19 @@ class _BodyState extends State<Body> {
             ),
             Text(pie, style: TextStyle(color: pie_color)),
             SizedBox(height: size.height * 0.03),
-            AlreadyHaveAnAccountCheck(
-              login: false,
-              press: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) {
-                      return LoginScreen();
-                    },
-                  ),
-                );
-              },
-            ),
+            // AlreadyHaveAnAccountCheck(
+            //   login: false,
+            //   press: () {
+            //     Navigator.push(
+            //       context,
+            //       MaterialPageRoute(
+            //         builder: (context) {
+            //           return LoginScreen();
+            //         },
+            //       ),
+            //     );
+            //   },
+            // ),
             // OrDivider(),
             // Row(
             //   mainAxisAlignment: MainAxisAlignment.center,
