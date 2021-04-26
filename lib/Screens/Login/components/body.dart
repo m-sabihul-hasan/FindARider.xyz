@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app/Screens/DriverHome/driverhome_screen.dart';
+import 'package:flutter_app/Screens/PassengerHome/passengerhome_screen.dart';
 import 'package:flutter_app/constants.dart';
 import 'package:flutter_app/Screens/Login/components/background.dart';
-import 'package:flutter_app/Screens/Home/home_screen.dart';
+// import 'package:flutter_app/Screens/Home/home_screen.dart';
 import 'package:flutter_app/Screens/Signup/signup_screen.dart';
 import 'package:flutter_app/components/already_have_an_account_acheck.dart';
 import 'package:flutter_app/components/rounded_button.dart';
@@ -77,14 +79,25 @@ class _BodyState extends State<Body> {
                     this.pie_color = Colors.green;
                     this.pie = "Login Successful!";
                     finalUsername = login_return;
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) {
-                          return HomeScreen();
-                        },
-                      ),
-                    );
+                    if (user == "Passenger") {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) {
+                            return PassengerHome();
+                          },
+                        ),
+                      );
+                    } else if (user == "Driver") {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) {
+                            return DriverHome();
+                          },
+                        ),
+                      );
+                    }
                   }
                 });
               },

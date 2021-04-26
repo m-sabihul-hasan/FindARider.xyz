@@ -39,7 +39,11 @@ rides = {
       fare: '35',
       time: '23:08',
       date: '4/24',
-      driver: 'asd'
+      driver: 'asd',
+      passenger1: 'None',
+      passenger2: 'None',
+      passenger3: 'None',
+      passenger4: 'None'
     },
     '02': {
       startLocation: 'i like to move it move it i like to move it move it i like to move it move it i like to move it move it i like to move it move it i like to move it move it i like to move it move it i like to move it move it i like to move it move it i like to move it move it i like to move it move it i like to move it move it i like to move it move it i like to move it move it ',
@@ -50,10 +54,31 @@ rides = {
       fare: '2',
       time: '23:09',
       date: '4/24',
-      driver: 'asd'
-    }
+      driver: 'asd',
+      passenger1: 'None',
+      passenger2: 'None',
+      passenger3: 'None',
+      passenger4: 'None'
+    },
+    // '03': {
+    //     startLocation: 'qwe',
+    //     destination: 'asd',
+    //     car: 'qweqwe',
+    //     licenseNumber: '1212312',
+    //     space: '2',
+    //     fare: '23',
+    //     time: '15:39',
+    //     date: '4/26',
+    //     driver: '1',
+    //     passenger1: 'None',
+    //     passenger2: 'None',
+    //     passenger3: 'None',
+    //     passenger4: 'None'
+    //   }
   };
-var ride_count = rides.length;
+var ride_count = Object.keys(rides).length;
+
+rides_booked = {};
 
 app.get('/', (req, res) => res.send('hello!'));
 
@@ -109,6 +134,12 @@ app.post('/createride', (req, res, next) => {
     for (const property in req.body) {
         rides[trip_id][property] = req.body[property];
     }
+    rides_booked[trip_id] = {};
+    rides_booked[trip_id]["driver"] = req.body["driver"];
+    for (var i = 0; i < 4; i++)
+    {
+        rides_booked[trip_id]["passenger"+i.toString()] = 'None';
+    }
     console.log(trip_id);
     res.send(trip_id);
 });
@@ -128,14 +159,25 @@ app.post('/listrides', (req, res, next) => {
     res.send(rides);
 });
 
+roomsJoined = {};
 connected_users = {};
 
 io.on('connection', socket => {
     //Get the chatID of the user and join in a room of the same chatID
     // chatID = socket.handshake.query.chatID
     // socket.join(chatID)
+
+    socket.on('addToRoom', (trip_id) => {
+        roomsJoined[socket.id] = trip_id;
+        socket.join(trip_id);
+    });
+
+    socket.on('leaveRoom', (trip_id) => {
+        socket.leave(trip_id);
+    });
+
     console.log("connected", socket.id);
-    socket.join('room 1');
+    // socket.join('room 1');
     //Leave the room if the user closes the socket
     socket.on('disconnect', () => {
         console.log("disconnected", socket.id);
@@ -148,12 +190,60 @@ io.on('connection', socket => {
         connected_users[socket.id] = {};
         connected_users[socket.id]["username"] = username["username"];
         connected_users[socket.id]["userType"] = username["userType"];
+        for(const property in rides) {
+            if (rides[property]["driver"] == username["username"] || rides[property]["passenger1"] == username["username"] || rides[property]["passenger2"] == username["username"] || rides[property]["passenger3"] == username["username"] || rides[property]["passenger4"] == username["username"]) {
+                // console.log(property);
+                toSend = rides[property];
+                toSend["tripID"] = property
+                io.to(socket.id).emit('activeride',JSON.stringify(toSend));
+            }
+        }
     })
 
+    socket.on('bookingRequest', trip_id => {
+        for(const property in connected_users) {
+            if (connected_users[property]["username"] == rides[trip_id]["driver"]) {
+                io.to(property).emit('bookingRequestRecieve', connected_users[socket.id]["username"]);
+            }
+        }
+    })
+
+    socket.on('bookingRequestResponse', response => {
+        response = JSON.parse(response);
+        console.log(response);
+        if (response["res"] == "true")
+        {
+            for(const property in rides) {
+                if (rides[property]["driver"] == connected_users[socket.id]["username"]) {
+                    rides[property]["space"] -= 1;
+                    io.in(property).emit("newPassenger")
+                    if (rides[property]["passenger1"] == 'None')
+                        p = "passenger1";
+                    else if (rides[property]["passenger2"] == 'None')
+                        p = "passenger2";
+                    else if (rides[property]["passenger3"] == 'None')
+                        p = "passenger3";
+                    else if (rides[property]["passenger4"] == 'None')
+                        p = "passenger4";
+
+                    rides[property][p] = response["passenger"];
+                    io.in(property).emit('addPassenger',p+response["username"]);
+                }
+            }
+
+            for(const property in connected_users) {
+                if (connected_users[property]["username"] == response["passenger"]) {
+                    console.log(response["passenger"]);
+                    io.to(property).emit('bookingRequestAccepted', "");
+                }
+            }
+        }
+    })
+    
     //Send message to only a particular user
     socket.on("message", message => {
         console.log(message, connected_users);
-        io.in('room 1').emit("recieveMessage", JSON.stringify({username: connected_users[socket.id]["username"], message: message, userType: connected_users[socket.id]["userType"]}));
+        io.in(roomsJoined[socket.id]).emit("recieveMessage", JSON.stringify({username: connected_users[socket.id]["username"], message: message, userType: connected_users[socket.id]["userType"]}));
         // socket.emit('recieveMessage', message);
         // //Send message to only that particular room
         // socket.in(receiverChatID).emit('receive_message', {

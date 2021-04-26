@@ -10,6 +10,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'dart:math' as math;
 
 class Body extends StatefulWidget {
   @override
@@ -32,6 +33,30 @@ class _BodyState extends State<Body> {
           return Scaffold(
             body: Column(
               children: <Widget>[
+                Row(mainAxisAlignment: MainAxisAlignment.start, children: [
+                  Padding(
+                      padding: EdgeInsets.all(15),
+                      child:
+                          // Transform.rotate(
+                          //     angle: 180 * math.pi / 180,
+                          FloatingActionButton.extended(
+                        onPressed: () {
+                          navigatorKey.currentState.pop();
+                        },
+                        icon: Transform.rotate(
+                            angle: 180 * math.pi / 180,
+                            child: Icon(
+                              Icons.send,
+                              color: Colors.white,
+                              size: 18,
+                            )),
+                        label: Text("Back",
+                            style:
+                                TextStyle(color: Colors.white, fontSize: 18)),
+                        backgroundColor: Colors.black,
+                        elevation: 0,
+                      ))
+                ]),
                 Expanded(
                   child: Scrollbar(
                     child: ListView.builder(

@@ -18,14 +18,42 @@ class Body extends StatefulWidget {
 }
 
 class _BodyState extends State<Body> {
+  String status = "";
   Map<String, dynamic> showingTripDetails;
+  updateStatus(input) {
+    if (input == "accepted") {
+      setState(() {
+        buttonsToShow.removeAt(0);
+        status = "Booking Accepted";
+        buttonsToShow.add({
+          "text": "Chat",
+          "function": () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) {
+                  return ChatScreen();
+                },
+              ),
+            );
+          }
+        });
+      });
+    } else if (input == "sent") {
+      setState(() {
+        status = "Sent Request to Driver. Please Wait";
+      });
+    }
+  }
+
   updateButtons() {
     buttonsToShow = [];
     if (userType == "D") {
-      buttonsToShow.add({"text": "Cancel", "function": {}});
+      buttonsToShow.add({"text": "Cancel", "function": () {}});
       buttonsToShow.add({
         "text": "Home",
-        "function": {
+        "function": () {
+          socket.emit('leaveRoom', showingTripDetails["tripID"]);
           Navigator.push(
             context,
             MaterialPageRoute(
@@ -33,12 +61,12 @@ class _BodyState extends State<Body> {
                 return DriverHome();
               },
             ),
-          )
+          );
         }
       });
       buttonsToShow.add({
         "text": "Chat",
-        "function": {
+        "function": () {
           Navigator.push(
             context,
             MaterialPageRoute(
@@ -46,14 +74,25 @@ class _BodyState extends State<Body> {
                 return ChatScreen();
               },
             ),
-          )
+          );
         }
       });
     } else {
-      buttonsToShow.add({"text": "Book", "function": () {}});
+      print(bookedTripDetails);
+      // print("ASD");
+      if (bookedTripDetails.length == 0) {
+        buttonsToShow.add({
+          "text": "Book",
+          "function": () {
+            sendBookingRequest();
+            updateStatus("sent");
+          }
+        });
+      }
       buttonsToShow.add({
         "text": "Home",
         "function": () {
+          socket.emit('leaveRoom', showingTripDetails["tripID"]);
           Navigator.push(
             context,
             MaterialPageRoute(
@@ -66,7 +105,7 @@ class _BodyState extends State<Body> {
       });
       // buttonsToShow.add({
       //   "text": "Chat",
-      //   "function": {
+      //   "function": () {
       //     Navigator.push(
       //       context,
       //       MaterialPageRoute(
@@ -74,7 +113,7 @@ class _BodyState extends State<Body> {
       //           return ChatScreen();
       //         },
       //       ),
-      //     )
+      //     );
       //   }
       // });
     }
@@ -87,11 +126,38 @@ class _BodyState extends State<Body> {
       showingTripDetails = viewTripDetails;
     else
       showingTripDetails = bookedTripDetails;
+    socket.emit('addToRoom', showingTripDetails["tripID"]);
     WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {
           updateButtons();
+          if (viewingBookedRide == true && userType == "P") {
+            setState(() {
+              // buttonsToShow.removeAt(0);
+              buttonsToShow.add({
+                "text": "Chat",
+                "function": () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) {
+                        return ChatScreen();
+                      },
+                    ),
+                  );
+                }
+              });
+            });
+          }
         }));
+    socket.on('bookingRequestAccepted', (data) {
+      updateStatus("accepted");
+    });
   }
 
+  void sendBookingRequest() {
+    socket.emit("bookingRequest", showingTripDetails["tripID"]);
+  }
+
+  @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     // setState(() {
@@ -100,9 +166,9 @@ class _BodyState extends State<Body> {
     // This size provide us total height and width of our screen
     return Background(
       child: SingleChildScrollView(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
+          child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
             Stack(
               children: <Widget>[
                 Container(
@@ -407,7 +473,7 @@ class _BodyState extends State<Body> {
                                     color: Colors.black),
                               ),
                               TextSpan(
-                                text: ' Ongoing',
+                                text: status,
                                 style: TextStyle(
                                   fontSize: 22,
                                   color: Colors.red,
@@ -432,78 +498,102 @@ class _BodyState extends State<Body> {
               ],
             ),
             Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
-              Scaffold(
-                  body: Padding(
-                      padding: EdgeInsets.all(15),
-                      child: Wrap(children: [
-                        Container(
-                            margin: EdgeInsets.symmetric(horizontal: 30),
-                            padding: EdgeInsets.all(15),
-                            child: Align(
-                                child: SizedBox(
-                                    width: size.width * 0.25,
-                                    height: 300.0,
-                                    child: ListView.builder(
-                                      itemCount: buttonsToShow.length,
-                                      itemBuilder: (context, i) {
-                                        return new Container(
-                                            child: DifferentCorneredButton(
-                                          press: buttonsToShow[i]["function"],
-                                          width: 0.25,
-                                          text: Text(buttonsToShow[i]["text"],
-                                              style: TextStyle(
-                                                  color: Colors.black,
-                                                  fontSize: 22)),
-                                          borderradius: BorderRadius.all(
-                                              Radius.circular(15.0)),
-                                        ));
-                                      },
-                                    ))))
-                      ])))
-              // DifferentCorneredButton(
-              //   press: () {},
-              //   width: 0.25,
-              //   text: Text("Book",
-              //       style: TextStyle(color: Colors.black, fontSize: 22)),
-              //   borderradius: BorderRadius.all(Radius.circular(15.0)),
-              // ),
-              // DifferentCorneredButton(
-              //   width: 0.25,
-              //   press: () {
-              //     if (userType == "D")
-              //       Navigator.push(
-              //         context,
-              //         MaterialPageRoute(
-              //           builder: (context) {
-              //             return DriverHome();
-              //           },
-              //         ),
-              //       );
-              //     else
-              //       Navigator.push(
-              //         context,
-              //         MaterialPageRoute(
-              //           builder: (context) {
-              //             return PassengerHome();
-              //           },
-              //         ),
-              //       );
-              //   },
-              //   text: Text("Home",
-              //       style: TextStyle(color: Colors.black, fontSize: 22)),
-              //   borderradius: BorderRadius.all(Radius.circular(15.0)),
-              // ),
-              // DifferentCorneredButton(
-              //   width: 0.25,
-              //   press: () {},
-              //   text: Text("Chat",
-              //       style: TextStyle(color: Colors.black, fontSize: 22)),
-              //   borderradius: BorderRadius.all(Radius.circular(15.0)),
-              // ),
+              Container(
+                  height: 100,
+                  // width: size.width * 1,
+                  child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    physics: NeverScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    itemCount: buttonsToShow.length,
+                    itemBuilder: (context, i) {
+                      return new Container(
+                          child: DifferentCorneredButton(
+                        marginHorizontal: size.width * 0.025,
+                        press: buttonsToShow[i]["function"],
+                        width: 0.25,
+                        text: Text(buttonsToShow[i]["text"],
+                            style:
+                                TextStyle(color: Colors.black, fontSize: 22)),
+                        borderradius: BorderRadius.all(Radius.circular(15.0)),
+                      ));
+                    },
+                  ))
             ])
-          ],
-        ),
-      ),
+
+            // Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
+            //   Scaffold(
+            //       body: Padding(
+            //           padding: EdgeInsets.all(15),
+            //           child: Wrap(children: [
+            //             Container(
+            //                 margin: EdgeInsets.symmetric(horizontal: 30),
+            //                 padding: EdgeInsets.all(15),
+            //                 child: Align(
+            //                     child: SizedBox(
+            //                         width: size.width * 0.25,
+            //                         height: 300.0,
+            //                         child: ListView.builder(
+            //                           itemCount: buttonsToShow.length,
+            //                           itemBuilder: (context, i) {
+            //                             return new Container(
+            //                                 child: DifferentCorneredButton(
+            //                               press: buttonsToShow[i]["function"],
+            //                               width: 0.25,
+            //                               text: Text(buttonsToShow[i]["text"],
+            //                                   style: TextStyle(
+            //                                       color: Colors.black,
+            //                                       fontSize: 22)),
+            //                               borderradius: BorderRadius.all(
+            //                                   Radius.circular(15.0)),
+            //                             ));
+            //                           },
+            //                         ))))
+            //           ])))
+            // DifferentCorneredButton(
+            //   press: () {},
+            //   width: 0.25,
+            //   text: Text("Book",
+            //       style: TextStyle(color: Colors.black, fontSize: 22)),
+            //   borderradius: BorderRadius.all(Radius.circular(15.0)),
+            // ),
+            // DifferentCorneredButton(
+            //   width: 0.25,
+            //   press: () {
+            //     if (userType == "D")
+            //       Navigator.push(
+            //         context,
+            //         MaterialPageRoute(
+            //           builder: (context) {
+            //             return DriverHome();
+            //           },
+            //         ),
+            //       );
+            //     else
+            //       Navigator.push(
+            //         context,
+            //         MaterialPageRoute(
+            //           builder: (context) {
+            //             return PassengerHome();
+            //           },
+            //         ),
+            //       );
+            //   },
+            //   text: Text("Home",
+            //       style: TextStyle(color: Colors.black, fontSize: 22)),
+            //   borderradius: BorderRadius.all(Radius.circular(15.0)),
+            // ),
+            // DifferentCorneredButton(
+            //   width: 0.25,
+            //   press: () {},
+            //   text: Text("Chat",
+            //       style: TextStyle(color: Colors.black, fontSize: 22)),
+            //   borderradius: BorderRadius.all(Radius.circular(15.0)),
+            // ),
+          ])
+          // ],
+          ),
+      // ),
       // ),
       // ],
       // ),

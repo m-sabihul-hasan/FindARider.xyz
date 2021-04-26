@@ -11,6 +11,7 @@ import 'package:flutter_app/components/rounded_button.dart';
 import 'package:flutter_app/components/rounded_input_field.dart';
 import 'package:flutter_app/components/rounded_limited_input_field.dart';
 import 'package:flutter_app/components/rounded_limited_number_field.dart';
+import 'package:flutter_app/constants.dart';
 import 'package:intl/intl.dart';
 
 class Body extends StatefulWidget {

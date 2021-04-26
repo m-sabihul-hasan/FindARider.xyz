@@ -72,7 +72,7 @@ createRide(startLocation, destination, car, licenseNumber, space, fare, time,
     'passenger3': 'None',
     'passenger4': 'None',
   };
-
+  viewingBookedRide = true;
   return [[], res.body];
 }
 

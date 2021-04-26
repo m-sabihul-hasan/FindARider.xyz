@@ -32,7 +32,7 @@ class Body extends StatefulWidget {
 }
 
 class BodyState extends State<Body> {
-  IO.Socket socket = IO.io('http://localhost:3000');
+  // IO.Socket socket = IO.io('http://localhost:3000');
   List messages = [];
   // List<String> messages = [];
   String message = "asd";
@@ -58,12 +58,12 @@ class BodyState extends State<Body> {
   }
 
   void connectToServer(IO.Socket socket) {
-    socket.emit(
-        'username', json.encode({"username": finalUsername, "userType": user}));
-    socket.onConnect((_) {
-      print('connected');
-      // socket.emit('message', 'test');
-    });
+    // socket.emit(
+    //     'username', json.encode({"username": finalUsername, "userType": user}));
+    // socket.onConnect((_) {
+    //   print('connected');
+    //   // socket.emit('message', 'test');
+    // });
     socket.on('recieveMessage', (data) {
       setState(() {
         data = jsonDecode(data);
@@ -78,7 +78,7 @@ class BodyState extends State<Body> {
       });
       // print(messages);
     });
-    socket.onDisconnect((_) => print('disconnect'));
+    // socket.onDisconnect((_) => print('disconnect'));
     socket.on('fromServer', (_) => print(_));
   }
 

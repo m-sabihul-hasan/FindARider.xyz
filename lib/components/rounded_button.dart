@@ -13,6 +13,7 @@ class RoundedButton extends StatelessWidget {
   final double paddingVertical;
   final double paddingHorizontal;
   final double marginHorizontal;
+  // final Color backgroundColor;
   const RoundedButton({
     Key key,
     this.text,
@@ -26,6 +27,7 @@ class RoundedButton extends StatelessWidget {
     this.marginHorizontal = -1,
     this.paddingVertical = 30,
     this.paddingHorizontal = 5,
+    // this.backgroundColor = Colors.white,
   }) : super(key: key);
 
   @override
@@ -33,7 +35,8 @@ class RoundedButton extends StatelessWidget {
     Size size = MediaQuery.of(context).size;
     return Container(
       decoration: BoxDecoration(
-          border: Border.all(color: borderColor, width: borderWidth)),
+        border: Border.all(color: borderColor, width: borderWidth),
+      ),
       margin: marginHorizontal == -1
           ? EdgeInsets.symmetric(vertical: marginVertical)
           : EdgeInsets.symmetric(
