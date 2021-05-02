@@ -20,14 +20,26 @@ class Body extends StatefulWidget {
 class _BodyState extends State<Body> {
   String status = "";
   Map<String, dynamic> showingTripDetails;
+  addPassenger(pas_num, passenger) {
+    setState(() {
+      showingTripDetails["passenger" + pas_num] = passenger;
+      print(showingTripDetails["space"].runtimeType);
+      showingTripDetails["space"] =
+          '${int.parse(showingTripDetails["space"]) - 1}';
+    });
+  }
+
   updateStatus(input) {
     if (input == "accepted") {
       setState(() {
+        bookedTripDetails = showingTripDetails;
+        viewingBookedRide = true;
         buttonsToShow.removeAt(0);
         status = "Booking Accepted";
         buttonsToShow.add({
           "text": "Chat",
           "function": () {
+            trip_id_chat = showingTripDetails["tripID"];
             Navigator.push(
               context,
               MaterialPageRoute(
@@ -42,6 +54,10 @@ class _BodyState extends State<Body> {
     } else if (input == "sent") {
       setState(() {
         status = "Sent Request to Driver. Please Wait";
+      });
+    } else if (input == "spaceFull") {
+      setState(() {
+        status = "Space full.";
       });
     }
   }
@@ -150,6 +166,18 @@ class _BodyState extends State<Body> {
         }));
     socket.on('bookingRequestAccepted', (data) {
       updateStatus("accepted");
+    });
+
+    socket.on('spaceFull', (data) {
+      updateStatus("spaceFull");
+    });
+
+    socket.on('addPassenger', (passenger) {
+      String pas_num = passenger[0];
+      print(passenger);
+      passenger = passenger.substring(1);
+      print(passenger);
+      addPassenger(pas_num, passenger);
     });
   }
 

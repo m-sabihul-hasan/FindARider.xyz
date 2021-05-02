@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/Screens/Chat/chat_screen.dart';
 import 'package:flutter_app/Screens/Chat/components/background.dart';
+import 'package:flutter_app/Screens/TripDetails/tripdetails_screen.dart';
 import 'package:flutter_app/components/rounded_button.dart';
 import 'package:flutter_app/constants.dart';
 import 'package:flutter_svg/svg.dart';
@@ -11,7 +12,7 @@ import 'package:flutter_app/components/rounded_button.dart';
 import 'package:flutter_app/components/rounded_input_field.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:socket_io/socket_io.dart';
-
+import 'dart:math' as math;
 import 'package:flutter/painting.dart';
 import 'package:flutter_chat_bubble/bubble_type.dart';
 import 'package:flutter_chat_bubble/chat_bubble.dart';
@@ -80,6 +81,28 @@ class BodyState extends State<Body> {
     });
     // socket.onDisconnect((_) => print('disconnect'));
     socket.on('fromServer', (_) => print(_));
+    socket.on('previousChat', (chat) {
+      print("CHAT");
+      print(chat);
+      chat = chat.replaceAll(new RegExp(r'},{'), '},,{');
+      print(chat);
+      chat = chat.split(',,');
+      print(chat);
+      if (chat[0] == "") return;
+      List<Map<dynamic, dynamic>> jsonChat = [];
+      for (int i = 0; i < chat.length; i++) {
+        jsonChat.add(jsonDecode(chat[i]));
+        if (jsonChat[i]["username"] == finalUsername)
+          jsonChat[i]["messageType"] = "1";
+        else
+          jsonChat[i]["messageType"] = "2";
+      }
+      setState(() {
+        messages = jsonChat;
+      });
+    });
+
+    socket.emit('previousChatRequest', "");
   }
 
 // Send Location to Server
@@ -135,7 +158,7 @@ class BodyState extends State<Body> {
         body: Column(children: <Widget>[
       // SizedBox(height: size.height * 0.1),
       Text(
-        'Trip ID: NaN',
+        'Trip ID: ${trip_id_chat}',
         style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
       ),
       // SizedBox(height: size.height * 0.05),
@@ -250,6 +273,31 @@ class BodyState extends State<Body> {
       // ],
       // ),
       // ),
+      Row(mainAxisAlignment: MainAxisAlignment.start, children: [
+        Padding(
+            padding: EdgeInsets.all(15),
+            child:
+                // Transform.rotate(
+                //     angle: 180 * math.pi / 180,
+                FloatingActionButton.extended(
+              onPressed: () {
+                // navigatorKey.currentState.pop();
+                navigatorKey.currentState.push(
+                    MaterialPageRoute(builder: (context) => TripDetails()));
+              },
+              icon: Transform.rotate(
+                  angle: 180 * math.pi / 180,
+                  child: Icon(
+                    Icons.send,
+                    color: Colors.white,
+                    size: 18,
+                  )),
+              label: Text("Back",
+                  style: TextStyle(color: Colors.white, fontSize: 18)),
+              backgroundColor: Colors.black,
+              elevation: 0,
+            ))
+      ]),
       Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [

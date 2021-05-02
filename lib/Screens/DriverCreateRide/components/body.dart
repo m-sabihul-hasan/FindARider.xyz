@@ -160,7 +160,8 @@ class _BodyState extends State<Body> {
                     this.pie_color = Colors.green;
                     this.pie =
                         "Ride created successfully!\n"; //${createRideReturn[1]}";
-                    // finalUsername = username;
+                    // finalUsername = username
+                    viewingBookedRide = true;
                     Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => TripDetails()),

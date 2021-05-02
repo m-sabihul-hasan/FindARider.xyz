@@ -10,11 +10,17 @@ import 'package:flutter_app/constants.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class Body extends StatelessWidget {
+class Body extends StatefulWidget {
+  @override
+  _BodyState createState() => _BodyState();
+}
+
+class _BodyState extends State<Body> {
   @override
   Widget build(BuildContext context) {
     initsocket();
     sendInfoToServer();
+    String errorMessage = "";
     Size size = MediaQuery.of(context).size;
     userType = "D";
     // This size provide us total height and width of our screen
@@ -59,14 +65,24 @@ class Body extends StatelessWidget {
                     fontWeight: FontWeight.w200),
               ),
               press: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) {
-                      return DriverCreateRide();
-                    },
-                  ),
-                );
+                setState(() {
+                  errorMessage = "";
+                });
+                if (viewingBookedRide != true) {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) {
+                        return DriverCreateRide();
+                      },
+                    ),
+                  );
+                } else {
+                  setState(() {
+                    errorMessage =
+                        "Ride already created. Please go to Current Ride";
+                  });
+                }
               },
             ),
             Divider(
@@ -74,14 +90,24 @@ class Body extends StatelessWidget {
             ),
             RoundedButton(
               press: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) {
-                      return TripDetails();
-                    },
-                  ),
-                );
+                print(viewingBookedRide);
+                setState(() {
+                  errorMessage = "";
+                });
+                if (viewingBookedRide != false) {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) {
+                        return TripDetails();
+                      },
+                    ),
+                  );
+                } else {
+                  setState(() {
+                    errorMessage = "Please create a ride first.";
+                  });
+                }
               },
               borderWidth: 0,
               borderColor: Colors.white,
@@ -163,25 +189,27 @@ class Body extends StatelessWidget {
             Divider(
               color: Colors.black,
             ),
-            RoundedButton(
-              text: Text("Chat (Testing)",
-                  style: GoogleFonts.yellowtail(
-                    textStyle: TextStyle(
-                        color: Colors.black,
-                        fontSize: 40,
-                        fontWeight: FontWeight.bold),
-                  )),
-              press: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) {
-                      return ChatScreen();
-                    },
-                  ),
-                );
-              },
-            ),
+            Text(errorMessage,
+                style: TextStyle(color: Colors.red, fontSize: 15)),
+            // RoundedButton(
+            //   text: Text("Chat (Testing)",
+            //       style: GoogleFonts.yellowtail(
+            //         textStyle: TextStyle(
+            //             color: Colors.black,
+            //             fontSize: 40,
+            //             fontWeight: FontWeight.bold),
+            //       )),
+            //   press: () {
+            //     Navigator.push(
+            //       context,
+            //       MaterialPageRoute(
+            //         builder: (context) {
+            //           return ChatScreen();
+            //         },
+            //       ),
+            //     );
+            //   },
+            // ),
             // SizedBox(height: size.height * 0.05),
             // RoundedButton(
             //   text: Text("Passenger",

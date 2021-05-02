@@ -59,7 +59,7 @@ rides = {
       passenger2: 'None',
       passenger3: 'None',
       passenger4: 'None'
-    },
+    }
     // '03': {
     //     startLocation: 'qwe',
     //     destination: 'asd',
@@ -79,6 +79,7 @@ rides = {
 var ride_count = Object.keys(rides).length;
 
 rides_booked = {};
+chat = {'03': []};
 
 app.get('/', (req, res) => res.send('hello!'));
 
@@ -140,6 +141,7 @@ app.post('/createride', (req, res, next) => {
     {
         rides_booked[trip_id]["passenger"+i.toString()] = 'None';
     }
+    chat[trip_id] = [];
     console.log(trip_id);
     res.send(trip_id);
 });
@@ -201,9 +203,13 @@ io.on('connection', socket => {
     })
 
     socket.on('bookingRequest', trip_id => {
-        for(const property in connected_users) {
-            if (connected_users[property]["username"] == rides[trip_id]["driver"]) {
-                io.to(property).emit('bookingRequestRecieve', connected_users[socket.id]["username"]);
+        if (rides[trip_id]["space"] == 0)
+            socket.emit('spaceFull', "");
+        else {
+            for(const property in connected_users) {
+                if (connected_users[property]["username"] == rides[trip_id]["driver"]) {
+                    io.to(property).emit('bookingRequestRecieve', connected_users[socket.id]["username"]);
+                }
             }
         }
     })
@@ -218,16 +224,16 @@ io.on('connection', socket => {
                     rides[property]["space"] -= 1;
                     io.in(property).emit("newPassenger")
                     if (rides[property]["passenger1"] == 'None')
-                        p = "passenger1";
+                        p = "1";
                     else if (rides[property]["passenger2"] == 'None')
-                        p = "passenger2";
+                        p = "2";
                     else if (rides[property]["passenger3"] == 'None')
-                        p = "passenger3";
+                        p = "3";
                     else if (rides[property]["passenger4"] == 'None')
-                        p = "passenger4";
+                        p = "4";
 
-                    rides[property][p] = response["passenger"];
-                    io.in(property).emit('addPassenger',p+response["username"]);
+                    rides[property]["passenger"+p] = response["passenger"];
+                    io.in(property).emit('addPassenger',p+response["passenger"]);
                 }
             }
 
@@ -240,10 +246,28 @@ io.on('connection', socket => {
         }
     })
     
+    socket.on('previousChatRequest', (useless) => {
+        console.log("chat history request recieved");
+        console.log(chat[roomsJoined[socket.id]])
+        previousChat = [];
+        trip = roomsJoined[socket.id];
+        console.log(chat);
+        console.log(roomsJoined);
+        for(i in chat[trip]) {
+            console.log("PUSHING");
+            console.log(i);
+            previousChat.push(JSON.stringify(chat[trip][i]));
+        }
+        console.log("being sent");
+        console.log(previousChat);
+        socket.emit('previousChat', previousChat.toString());
+    });
+
     //Send message to only a particular user
     socket.on("message", message => {
         console.log(message, connected_users);
         io.in(roomsJoined[socket.id]).emit("recieveMessage", JSON.stringify({username: connected_users[socket.id]["username"], message: message, userType: connected_users[socket.id]["userType"]}));
+        chat[roomsJoined[socket.id]].push({username: connected_users[socket.id]["username"], message: message, userType: connected_users[socket.id]["userType"]});
         // socket.emit('recieveMessage', message);
         // //Send message to only that particular room
         // socket.in(receiverChatID).emit('receive_message', {

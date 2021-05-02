@@ -3,7 +3,7 @@ import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'dart:convert';
 import 'package:flutter_app/Screens/RecieveBooking/recievebooking_screen.dart';
 
-final GlobalKey<NavigatorState> navigatorKey = new GlobalKey<NavigatorState>();
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 const button_text = Colors.white;
 const label_text = Colors.black;
 const apiBaseRoute = "http://localhost:3000";
@@ -18,6 +18,7 @@ List<Map<dynamic, dynamic>> buttonsToShow = [];
 IO.Socket socket;
 bool socketinit = false;
 String bookingRecieve = "";
+String trip_id_chat = "";
 
 initsocket() {
   if (socketinit == false) {
