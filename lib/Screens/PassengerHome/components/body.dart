@@ -16,12 +16,13 @@ class Body extends StatefulWidget {
 }
 
 class _BodyState extends State<Body> {
+  String errorMessage = "";
   @override
   Widget build(BuildContext context) {
     initsocket();
     sendInfoToServer();
     userType = "P";
-    String errorMessage = "";
+
     Size size = MediaQuery.of(context).size;
     // This size provide us total height and width of our screen
     return Background(
