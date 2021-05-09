@@ -78,82 +78,82 @@ class Body extends StatelessWidget {
                 );
               },
             ),
-            RoundedButton(
-              text: Text(
-                "passenger home",
-                style:
-                    TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
-              ),
-              color: button_text,
-              textColor: Colors.black,
-              press: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) {
-                      return PassengerHome();
-                    },
-                  ),
-                );
-              },
-            ),
-            RoundedButton(
-              text: Text(
-                "driver home",
-                style:
-                    TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
-              ),
-              color: button_text,
-              textColor: Colors.black,
-              press: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) {
-                      return DriverHome();
-                    },
-                  ),
-                );
-              },
-            ),
-            RoundedButton(
-              text: Text(
-                "trip details",
-                style:
-                    TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
-              ),
-              color: button_text,
-              textColor: Colors.black,
-              press: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) {
-                      return TripDetails();
-                    },
-                  ),
-                );
-              },
-            ),
-            RoundedButton(
-              text: Text(
-                "recieve booking",
-                style:
-                    TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
-              ),
-              color: button_text,
-              textColor: Colors.black,
-              press: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) {
-                      return RecieveBooking();
-                    },
-                  ),
-                );
-              },
-            ),
+            // RoundedButton(
+            //   text: Text(
+            //     "passenger home",
+            //     style:
+            //         TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+            //   ),
+            //   color: button_text,
+            //   textColor: Colors.black,
+            //   press: () {
+            //     Navigator.push(
+            //       context,
+            //       MaterialPageRoute(
+            //         builder: (context) {
+            //           return PassengerHome();
+            //         },
+            //       ),
+            //     );
+            //   },
+            // ),
+            // RoundedButton(
+            //   text: Text(
+            //     "driver home",
+            //     style:
+            //         TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+            //   ),
+            //   color: button_text,
+            //   textColor: Colors.black,
+            //   press: () {
+            //     Navigator.push(
+            //       context,
+            //       MaterialPageRoute(
+            //         builder: (context) {
+            //           return DriverHome();
+            //         },
+            //       ),
+            //     );
+            //   },
+            // ),
+            // RoundedButton(
+            //   text: Text(
+            //     "trip details",
+            //     style:
+            //         TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+            //   ),
+            //   color: button_text,
+            //   textColor: Colors.black,
+            //   press: () {
+            //     Navigator.push(
+            //       context,
+            //       MaterialPageRoute(
+            //         builder: (context) {
+            //           return TripDetails();
+            //         },
+            //       ),
+            //     );
+            //   },
+            // ),
+            // RoundedButton(
+            //   text: Text(
+            //     "recieve booking",
+            //     style:
+            //         TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+            //   ),
+            //   color: button_text,
+            //   textColor: Colors.black,
+            //   press: () {
+            //     Navigator.push(
+            //       context,
+            //       MaterialPageRoute(
+            //         builder: (context) {
+            //           return RecieveBooking();
+            //         },
+            //       ),
+            //     );
+            //   },
+            // ),
             SizedBox(height: size.height * 0.25),
             RoundedButton(
               text: Text(

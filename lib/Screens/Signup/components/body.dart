@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app/Screens/DriverHome/driverhome_screen.dart';
 import 'package:flutter_app/Screens/Home/home_screen.dart';
 import 'package:flutter_app/Screens/Login/login_screen.dart';
+import 'package:flutter_app/Screens/PassengerHome/passengerhome_screen.dart';
 import 'package:flutter_app/Screens/Signup/components/background.dart';
 import 'package:flutter_app/Screens/Signup/components/or_divider.dart';
 import 'package:flutter_app/Screens/Signup/components/social_icon.dart';
@@ -37,6 +39,12 @@ class _BodyState extends State<Body> {
   String pie = "";
 
   Color pie_color;
+
+  // Default Radio Button Selected Item When App Starts.
+  String radioButtonItem = 'ONE';
+
+  // Group Value for Radio Button.
+  int id = 1;
 
   @override
   Widget build(BuildContext context) {
@@ -108,6 +116,46 @@ class _BodyState extends State<Body> {
             //   text: "SIGNUP",
             //   press: () {},
             // ),
+            SizedBox(height: size.height * 0.015),
+            Text("Login As:",
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30)),
+            SizedBox(height: size.height * 0.01),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Radio(
+                  value: 1,
+                  groupValue: id,
+                  onChanged: (val) {
+                    setState(() {
+                      radioButtonItem = 'Driver';
+                      id = 1;
+                    });
+                  },
+                ),
+                Text(
+                  'Driver',
+                  style: new TextStyle(fontSize: 17.0),
+                ),
+                SizedBox(width: size.width * 0.05),
+                Radio(
+                  value: 2,
+                  groupValue: id,
+                  onChanged: (val) {
+                    setState(() {
+                      radioButtonItem = 'Passenger';
+                      id = 2;
+                    });
+                  },
+                ),
+                Text(
+                  'Passenger',
+                  style: new TextStyle(
+                    fontSize: 17.0,
+                  ),
+                ),
+              ],
+            ),
             SizedBox(height: size.height * 0.05),
             RoundedButton(
               text: Text(
@@ -126,10 +174,25 @@ class _BodyState extends State<Body> {
                     this.pie_color = Colors.green;
                     this.pie = "Registration Successful!";
                     finalUsername = username;
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => HomeScreen()),
-                    );
+                    if (radioButtonItem == "Passenger") {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) {
+                            return PassengerHome();
+                          },
+                        ),
+                      );
+                    } else if (radioButtonItem == "Driver") {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) {
+                            return DriverHome();
+                          },
+                        ),
+                      );
+                    }
                   }
                 });
               },
