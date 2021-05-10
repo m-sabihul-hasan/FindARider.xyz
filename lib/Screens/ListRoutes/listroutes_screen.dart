@@ -27,6 +27,4 @@ listRides() async {
     activeRoutesJson[trip_id]["tripID"] = trip_id;
     activeRoutes.add(activeRoutesJson[trip_id]);
   }
-  // print(activeRoutes);
-  // return activeRoutes;
 }

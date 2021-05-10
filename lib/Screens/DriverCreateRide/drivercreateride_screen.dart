@@ -47,15 +47,7 @@ createRide(startLocation, destination, car, licenseNumber, space, fare, time,
       'passenger4': 'None',
     }),
   );
-  // Future.delayed(Duration(seconds: 2), () => print(res));
 
-  // var to_check = json.decode(res.body);
-  // List toShow = [];
-  // if (to_check['username'] == true) toShow.add('Username');
-  // if (to_check['email'] == true) toShow.add('Email');
-  // if (to_check['mobile'] == true) toShow.add('Mobile no.');
-  // String toShow_string = toShow.join(", ");
-  // print(toShow_string);g
   bookedTripDetails = {
     'startLocation': startLocation,
     'destination': destination,
@@ -75,9 +67,3 @@ createRide(startLocation, destination, car, licenseNumber, space, fare, time,
   viewingBookedRide = true;
   return [[], res.body];
 }
-
-// if (response.statusCode == 201) {
-// } else {
-//   throw Exception('Failed to create album.');
-// }
-// }

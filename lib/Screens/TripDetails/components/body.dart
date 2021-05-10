@@ -2,10 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app/Screens/Chat/chat_screen.dart';
 import 'package:flutter_app/Screens/DriverHome/driverhome_screen.dart';
 import 'package:flutter_app/Screens/PassengerHome/passengerhome_screen.dart';
-// import 'package:flutter_app/Screens/Login/login_screen.dart';
-// import 'package:flutter_app/Screens/Signup/signup_screen.dart';
 import 'package:flutter_app/Screens/TripDetails/components/background.dart';
-// import 'package:flutter_app/Screens/Chat/chat_screen.dart';
 import 'package:flutter_app/Screens/TripDetails/tripdetails_screen.dart';
 import 'package:flutter_app/components/rounded_button.dart';
 import 'package:flutter_app/constants.dart';
@@ -119,19 +116,6 @@ class _BodyState extends State<Body> {
           );
         }
       });
-      // buttonsToShow.add({
-      //   "text": "Chat",
-      //   "function": () {
-      //     Navigator.push(
-      //       context,
-      //       MaterialPageRoute(
-      //         builder: (context) {
-      //           return ChatScreen();
-      //         },
-      //       ),
-      //     );
-      //   }
-      // });
     }
   }
 
@@ -188,10 +172,7 @@ class _BodyState extends State<Body> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    // setState(() {
-    //   updateButtons();
-    // });
-    // This size provide us total height and width of our screen
+
     return Background(
       child: SingleChildScrollView(
           child: Column(
@@ -548,84 +529,7 @@ class _BodyState extends State<Body> {
                     },
                   ))
             ])
-
-            // Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
-            //   Scaffold(
-            //       body: Padding(
-            //           padding: EdgeInsets.all(15),
-            //           child: Wrap(children: [
-            //             Container(
-            //                 margin: EdgeInsets.symmetric(horizontal: 30),
-            //                 padding: EdgeInsets.all(15),
-            //                 child: Align(
-            //                     child: SizedBox(
-            //                         width: size.width * 0.25,
-            //                         height: 300.0,
-            //                         child: ListView.builder(
-            //                           itemCount: buttonsToShow.length,
-            //                           itemBuilder: (context, i) {
-            //                             return new Container(
-            //                                 child: DifferentCorneredButton(
-            //                               press: buttonsToShow[i]["function"],
-            //                               width: 0.25,
-            //                               text: Text(buttonsToShow[i]["text"],
-            //                                   style: TextStyle(
-            //                                       color: Colors.black,
-            //                                       fontSize: 22)),
-            //                               borderradius: BorderRadius.all(
-            //                                   Radius.circular(15.0)),
-            //                             ));
-            //                           },
-            //                         ))))
-            //           ])))
-            // DifferentCorneredButton(
-            //   press: () {},
-            //   width: 0.25,
-            //   text: Text("Book",
-            //       style: TextStyle(color: Colors.black, fontSize: 22)),
-            //   borderradius: BorderRadius.all(Radius.circular(15.0)),
-            // ),
-            // DifferentCorneredButton(
-            //   width: 0.25,
-            //   press: () {
-            //     if (userType == "D")
-            //       Navigator.push(
-            //         context,
-            //         MaterialPageRoute(
-            //           builder: (context) {
-            //             return DriverHome();
-            //           },
-            //         ),
-            //       );
-            //     else
-            //       Navigator.push(
-            //         context,
-            //         MaterialPageRoute(
-            //           builder: (context) {
-            //             return PassengerHome();
-            //           },
-            //         ),
-            //       );
-            //   },
-            //   text: Text("Home",
-            //       style: TextStyle(color: Colors.black, fontSize: 22)),
-            //   borderradius: BorderRadius.all(Radius.circular(15.0)),
-            // ),
-            // DifferentCorneredButton(
-            //   width: 0.25,
-            //   press: () {},
-            //   text: Text("Chat",
-            //       style: TextStyle(color: Colors.black, fontSize: 22)),
-            //   borderradius: BorderRadius.all(Radius.circular(15.0)),
-            // ),
-          ])
-          // ],
-          ),
-      // ),
-      // ),
-      // ],
-      // ),
-      // ),
+          ])),
     );
   }
 }

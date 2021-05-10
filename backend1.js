@@ -27,62 +27,6 @@ app.use(bodyParser.json());
 
 const PORT = process.env.PORT || 3000
 
-// users = {
-//             '1':{username:'1',mobile:'1',password:'1'},
-//             '2':{username:'2',mobile:'2',password:'2'}
-//         };
-
-// rides = {
-//     '01': {
-//       startLocation: "import 'package:flutter_app/Screens/ListRoutes/listroutes_screen.dart';",
-//       destination: "import 'package:flutter_app/Screens/ListRoutes/listroutes_screen.dart';",
-//       car: 'awewq4',
-//       licenseNumber: 'asdsare',
-//       space: '2',
-//       fare: '35',
-//       time: '23:08',
-//       date: '4/24',
-//       driver: 'asd',
-//       passenger1: 'None',
-//       passenger2: 'None',
-//       passenger3: 'None',
-//       passenger4: 'None'
-//     },
-//     '02': {
-//       startLocation: 'i like to move it move it i like to move it move it i like to move it move it i like to move it move it i like to move it move it i like to move it move it i like to move it move it i like to move it move it i like to move it move it i like to move it move it i like to move it move it i like to move it move it i like to move it move it i like to move it move it ',
-//       destination: 'i like to move it move it i like to move it move it i like to move it move it i like to move it move it i like to move it move it not',
-//       car: 'Cultus',
-//       licenseNumber: 'weo9rpw',
-//       space: '1',
-//       fare: '2',
-//       time: '23:09',
-//       date: '4/24',
-//       driver: 'asd',
-//       passenger1: 'None',
-//       passenger2: 'None',
-//       passenger3: 'None',
-//       passenger4: 'None'
-//     }
-//     // '03': {
-//     //     startLocation: 'qwe',
-//     //     destination: 'asd',
-//     //     car: 'qweqwe',
-//     //     licenseNumber: '1212312',
-//     //     space: '2',
-//     //     fare: '23',
-//     //     time: '15:39',
-//     //     date: '4/26',
-//     //     driver: '1',
-//     //     passenger1: 'None',
-//     //     passenger2: 'None',
-//     //     passenger3: 'None',
-//     //     passenger4: 'None'
-//     //   }
-//   };
-// var ride_count = Object.keys(rides).length;
-
-// rides_booked = {};
-// chat = {'03': []};
 
 let users = {};
 let rides = {};
@@ -90,6 +34,7 @@ let rides_booked = {};
 let chat = {};
 var ride_count = 0;
 
+// Fetch data from database to local cache
 MongoClient.connect(url, function(err, db) {
     var dbo = db.db("application");
 
@@ -154,6 +99,7 @@ function update_rides_booked() {
 
 app.get('/', (req, res) => res.send('hello!'));
 
+// Respond to signup request
 app.post('/signup', (req, res, next) => {
     console.log(req.body);
     res.status(200);
@@ -161,12 +107,13 @@ app.post('/signup', (req, res, next) => {
     res.send(JSON.stringify(uniqueness));
     if (uniqueness['mobile'] == false && uniqueness['username'] == false && uniqueness['email'] == false)
     {
-        users[req.body['email']] = {name: req.body['name'], email: req.body['username'], mobile: req.body['mobile'], password: req.body['password']};
+        users[req.body['email']] = {name: req.body['name'], username: req.body['username'], mobile: req.body['mobile'], password: req.body['password']};
         update_users();
     }
     console.log(users)
 });
 
+// Check if user details are unique
 function confirm_unique(user)
 {
     error = {username: false, email: false, mobile: false};
@@ -185,53 +132,53 @@ function confirm_unique(user)
     return error;
 }
 
+// Confirm login credentials
 app.post('/login', (req, res, next) => {
     res.status(200);
+
     if (req.body['email'] in users && users[req.body['email']]['password'] == req.body['password']) 
     {
-        // console.log(users.body['email']['username']);
         res.send(users[req.body['email']]['username']);
     }
     else
         res.send('false');
 });
 
+// Create a ride request by a driver
 app.post('/createride', (req, res, next) => {
     res.status(200);
-    // console.log(users.body['email']['username']);
     ride_count += 1;
     trip_id = ride_count.toString();
     trip_id = (5-trip_id.length)*"0" + trip_id;
-    // console.log(req.body);
     rides[trip_id] = {};
+
     for (const property in req.body) {
         rides[trip_id][property] = req.body[property];
     }
+
     rides_booked[trip_id] = {};
     rides_booked[trip_id]["driver"] = req.body["driver"];
+
     for (var i = 0; i < 4; i++)
     {
         rides_booked[trip_id]["passenger"+i.toString()] = 'None';
+
     }
     chat[trip_id] = [];
+
     update_rides();
     update_rides_booked();
     update_chat();
+
     console.log(trip_id);
+
     res.send(trip_id);
 });
 
+// Send a list of active rides to passengers
 app.post('/listrides', (req, res, next) => {
     res.status(200);
-    // console.log(users.body['email']['username']);
-    // ride_count += 1;
-    // trip_id = ride_count.toString();
-    // trip_id = (5-trip_id.length)*"0" + trip_id;
-    // console.log(req.body);
-    // rides[trip_id] = {};
-    // for (const property in req.body) {
-        // rides[trip_id][property] = req.body[property];
-    // }
+
     let send_rides = rides;
     for (const property in send_rides)
     {
@@ -239,6 +186,7 @@ app.post('/listrides', (req, res, next) => {
             delete send_rides[property];
     }
     console.log(send_rides);
+
     res.send(send_rides);
 });
 
@@ -246,10 +194,8 @@ roomsJoined = {};
 connected_users = {};
 
 io.on('connection', socket => {
-    //Get the chatID of the user and join in a room of the same chatID
-    // chatID = socket.handshake.query.chatID
-    // socket.join(chatID)
 
+    // Add users to trip chatroom
     socket.on('addToRoom', (trip_id) => {
         roomsJoined[socket.id] = trip_id;
         socket.join(trip_id);
@@ -260,13 +206,13 @@ io.on('connection', socket => {
     });
 
     console.log("connected", socket.id);
-    // socket.join('room 1');
-    //Leave the room if the user closes the socket
+
     socket.on('disconnect', () => {
         console.log("disconnected", socket.id);
         delete connected_users[socket.id];
     })
 
+    // Store the socket id of the currently logged in users
     socket.on('username', username => {
         username = JSON.parse(username);
         console.log(username);
@@ -283,6 +229,7 @@ io.on('connection', socket => {
         }
     })
 
+    // Send a booking request to the driver
     socket.on('bookingRequest', trip_id => {
         if (rides[trip_id]["space"] == 0)
             socket.emit('spaceFull', "");
@@ -295,6 +242,7 @@ io.on('connection', socket => {
         }
     })
 
+    // Recieve the response of a booking request from the driver
     socket.on('bookingRequestResponse', response => {
         response = JSON.parse(response);
         console.log(response);
@@ -328,6 +276,7 @@ io.on('connection', socket => {
         }
     })
     
+    // Request chat history
     socket.on('previousChatRequest', (useless) => {
         console.log("chat history request recieved");
         console.log(chat[roomsJoined[socket.id]])
@@ -345,19 +294,12 @@ io.on('connection', socket => {
         socket.emit('previousChat', previousChat.toString());
     });
 
-    //Send message to only a particular user
+    //Send message to the passengers/rider in the trip
     socket.on("message", message => {
         console.log(message, connected_users);
         io.in(roomsJoined[socket.id]).emit("recieveMessage", JSON.stringify({username: connected_users[socket.id]["username"], message: message, userType: connected_users[socket.id]["userType"]}));
         chat[roomsJoined[socket.id]].push({username: connected_users[socket.id]["username"], message: message, userType: connected_users[socket.id]["userType"]});
         update_chat();
-        // socket.emit('recieveMessage', message);
-        // //Send message to only that particular room
-        // socket.in(receiverChatID).emit('receive_message', {
-        //     'content': content,
-        //     'senderChatID': senderChatID,
-        //     'receiverChatID':receiverChatID,
-        // })
     })
 });
 

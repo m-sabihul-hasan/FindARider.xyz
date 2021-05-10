@@ -41,7 +41,7 @@ class _BodyState extends State<Body> {
   Color pie_color;
 
   // Default Radio Button Selected Item When App Starts.
-  String radioButtonItem = 'ONE';
+  String radioButtonItem = 'Driver';
 
   // Group Value for Radio Button.
   int id = 1;
@@ -60,10 +60,6 @@ class _BodyState extends State<Body> {
                       TextStyle(fontWeight: FontWeight.bold, fontSize: 70),
                 )),
             SizedBox(height: size.height * 0.03),
-            // SvgPicture.asset(
-            //   "assets/icons/signup.svg",
-            //   height: size.height * 0.35,
-            // ),
             RoundedInputField(
               hintText: "Full Name",
               onChanged: (value) {
@@ -164,6 +160,7 @@ class _BodyState extends State<Body> {
                     TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
               ),
               press: () async {
+                user = radioButtonItem;
                 String unique = await signup(
                     name, email, mobile, username, password, confirm_password);
                 setState(() {
@@ -212,24 +209,6 @@ class _BodyState extends State<Body> {
                 );
               },
             ),
-            // OrDivider(),
-            // Row(
-            //   mainAxisAlignment: MainAxisAlignment.center,
-            //   children: <Widget>[
-            //     SocalIcon(
-            //       iconSrc: "assets/icons/facebook.svg",
-            //       press: () {},
-            //     ),
-            //     SocalIcon(
-            //       iconSrc: "assets/icons/twitter.svg",
-            //       press: () {},
-            //     ),
-            //     SocalIcon(
-            //       iconSrc: "assets/icons/google-plus.svg",
-            //       press: () {},
-            //     ),
-            //   ],
-            // )
           ],
         ),
       ),

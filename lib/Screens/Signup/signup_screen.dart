@@ -39,9 +39,3 @@ signup(name, email, mobile, username, password, confirm_password) async {
   // print(toShow_string);
   return toShow_string;
 }
-
-// if (response.statusCode == 201) {
-// } else {
-//   throw Exception('Failed to create album.');
-// }
-// }

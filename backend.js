@@ -60,21 +60,6 @@ rides = {
       passenger3: 'None',
       passenger4: 'None'
     }
-    // '03': {
-    //     startLocation: 'qwe',
-    //     destination: 'asd',
-    //     car: 'qweqwe',
-    //     licenseNumber: '1212312',
-    //     space: '2',
-    //     fare: '23',
-    //     time: '15:39',
-    //     date: '4/26',
-    //     driver: '1',
-    //     passenger1: 'None',
-    //     passenger2: 'None',
-    //     passenger3: 'None',
-    //     passenger4: 'None'
-    //   }
   };
 var ride_count = Object.keys(rides).length;
 
@@ -117,7 +102,6 @@ app.post('/login', (req, res, next) => {
     res.status(200);
     if (req.body['email'] in users && users[req.body['email']]['password'] == req.body['password']) 
     {
-        // console.log(users.body['email']['username']);
         res.send(users[req.body['email']]['username']);
     }
     else
@@ -126,11 +110,11 @@ app.post('/login', (req, res, next) => {
 
 app.post('/createride', (req, res, next) => {
     res.status(200);
-    // console.log(users.body['email']['username']);
+
     ride_count += 1;
     trip_id = ride_count.toString();
     trip_id = (5-trip_id.length)*"0" + trip_id;
-    // console.log(req.body);
+
     rides[trip_id] = {};
     for (const property in req.body) {
         rides[trip_id][property] = req.body[property];
@@ -148,22 +132,16 @@ app.post('/createride', (req, res, next) => {
 
 app.post('/listrides', (req, res, next) => {
     res.status(200);
-    // console.log(users.body['email']['username']);
-    // ride_count += 1;
-    // trip_id = ride_count.toString();
-    // trip_id = (5-trip_id.length)*"0" + trip_id;
-    // console.log(req.body);
-    // rides[trip_id] = {};
-    // for (const property in req.body) {
-        // rides[trip_id][property] = req.body[property];
-    // }
+
     let send_rides = rides;
     for (const property in send_rides)
     {
         if (send_rides[property]["space"] == '0')
             delete send_rides[property];
     }
+
     console.log(send_rides);
+
     res.send(send_rides);
 });
 
@@ -171,10 +149,8 @@ roomsJoined = {};
 connected_users = {};
 
 io.on('connection', socket => {
-    //Get the chatID of the user and join in a room of the same chatID
-    // chatID = socket.handshake.query.chatID
-    // socket.join(chatID)
 
+    // Add users to trip chatroom
     socket.on('addToRoom', (trip_id) => {
         roomsJoined[socket.id] = trip_id;
         socket.join(trip_id);
@@ -185,13 +161,13 @@ io.on('connection', socket => {
     });
 
     console.log("connected", socket.id);
-    // socket.join('room 1');
-    //Leave the room if the user closes the socket
+
     socket.on('disconnect', () => {
         console.log("disconnected", socket.id);
         delete connected_users[socket.id];
     })
 
+    // Store the socket id of the currently logged in users
     socket.on('username', username => {
         username = JSON.parse(username);
         console.log(username);
@@ -208,6 +184,7 @@ io.on('connection', socket => {
         }
     })
 
+    // Send a booking request to the driver
     socket.on('bookingRequest', trip_id => {
         if (rides[trip_id]["space"] == 0)
             socket.emit('spaceFull', "");
@@ -220,6 +197,7 @@ io.on('connection', socket => {
         }
     })
 
+    // Recieve the response of a booking request from the driver
     socket.on('bookingRequestResponse', response => {
         response = JSON.parse(response);
         console.log(response);
@@ -251,7 +229,8 @@ io.on('connection', socket => {
             }
         }
     })
-    
+
+    // Request chat history
     socket.on('previousChatRequest', (useless) => {
         console.log("chat history request recieved");
         console.log(chat[roomsJoined[socket.id]])
@@ -269,18 +248,11 @@ io.on('connection', socket => {
         socket.emit('previousChat', previousChat.toString());
     });
 
-    //Send message to only a particular user
+    //Send message to the passengers/rider in the trip
     socket.on("message", message => {
         console.log(message, connected_users);
         io.in(roomsJoined[socket.id]).emit("recieveMessage", JSON.stringify({username: connected_users[socket.id]["username"], message: message, userType: connected_users[socket.id]["userType"]}));
         chat[roomsJoined[socket.id]].push({username: connected_users[socket.id]["username"], message: message, userType: connected_users[socket.id]["userType"]});
-        // socket.emit('recieveMessage', message);
-        // //Send message to only that particular room
-        // socket.in(receiverChatID).emit('receive_message', {
-        //     'content': content,
-        //     'senderChatID': senderChatID,
-        //     'receiverChatID':receiverChatID,
-        // })
     })
 });
 

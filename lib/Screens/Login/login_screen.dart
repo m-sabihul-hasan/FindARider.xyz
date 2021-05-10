@@ -24,14 +24,6 @@ login(email, password) async {
       'password': password,
     }),
   );
-  // Future.delayed(Duration(seconds: 2), () => print(res));
 
   return res.body;
-  // List toShow = [];
-  // if (to_check['username'] == true) toShow.add('Username');
-  // if (to_check['email'] == true) toShow.add('Email');
-  // if (to_check['mobile'] == true) toShow.add('Mobile no.');
-  // String toShow_string = toShow.join(", ");
-  // // print(toShow_string);
-  // return toShow_string;
 }

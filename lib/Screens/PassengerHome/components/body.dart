@@ -30,13 +30,6 @@ class _BodyState extends State<Body> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            // SizedBox(height: size.height * 0.1),
-            // Text("Home",
-            //     style: GoogleFonts.yellowtail(
-            //       textStyle:
-            //           TextStyle(fontWeight: FontWeight.bold, fontSize: 100),
-            //     )),
-            // SizedBox(height: size.height * 0.05),
             Image.asset(
               "assets/images/cover.png",
               height: size.height * 0.32,
@@ -123,16 +116,6 @@ class _BodyState extends State<Body> {
                     fontSize: 30,
                     fontWeight: FontWeight.w200),
               ),
-              // press: () {
-              //   Navigator.push(
-              //     context,
-              //     MaterialPageRoute(
-              //       builder: (context) {
-              //         return ChatScreen();
-              //       },
-              //     ),
-              //   );
-              // },
             ),
             Divider(
               color: Colors.black,
@@ -150,16 +133,6 @@ class _BodyState extends State<Body> {
                     fontSize: 30,
                     fontWeight: FontWeight.w200),
               ),
-              // press: () {
-              //   Navigator.push(
-              //     context,
-              //     MaterialPageRoute(
-              //       builder: (context) {
-              //         return ChatScreen();
-              //       },
-              //     ),
-              //   );
-              // },
             ),
             Divider(
               color: Colors.black,
@@ -177,83 +150,12 @@ class _BodyState extends State<Body> {
                     fontSize: 30,
                     fontWeight: FontWeight.w200),
               ),
-              // press: () {
-              //   Navigator.push(
-              //     context,
-              //     MaterialPageRoute(
-              //       builder: (context) {
-              //         return ChatScreen();
-              //       },
-              //     ),
-              //   );
-              // },
             ),
             Divider(
               color: Colors.black,
             ),
             Text(errorMessage,
                 style: TextStyle(color: Colors.red, fontSize: 15)),
-            // RoundedButton(
-            //   text: Text("Chat (Testing)",
-            //       style: GoogleFonts.yellowtail(
-            //         textStyle: TextStyle(
-            //             color: Colors.black,
-            //             fontSize: 40,
-            //             fontWeight: FontWeight.bold),
-            //       )),
-            //   press: () {
-            //     Navigator.push(
-            //       context,
-            //       MaterialPageRoute(
-            //         builder: (context) {
-            //           return ChatScreen();
-            //         },
-            //       ),
-            //     );
-            //   },
-            // ),
-            // SizedBox(height: size.height * 0.05),
-            // RoundedButton(
-            //   text: Text("Passenger",
-            //       style: GoogleFonts.yellowtail(
-            //         textStyle: TextStyle(
-            //             color: Colors.black,
-            //             fontSize: 40,
-            //             fontWeight: FontWeight.bold),
-            //       )),
-            //   color: button_text,
-            //   textColor: Colors.black,
-            //   press: () {
-            //     Navigator.push(
-            //       context,
-            //       MaterialPageRoute(
-            //         builder: (context) {
-            //           return LoginScreen();
-            //         },
-            //       ),
-            //     );
-            //   },
-            // ),
-            // SizedBox(height: size.height * 0.25),
-            // RoundedButton(
-            //   text: Text(
-            //     "Signup using student email",
-            //     style:
-            //         TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
-            //   ),
-            //   color: button_text,
-            //   textColor: Colors.black,
-            //   press: () {
-            //     Navigator.push(
-            //       context,
-            //       MaterialPageRoute(
-            //         builder: (context) {
-            //           return SignUpScreen();
-            //         },
-            //       ),
-            //     );
-            //   },
-            // ),
           ],
         ),
       ),
