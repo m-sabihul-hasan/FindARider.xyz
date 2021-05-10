@@ -157,8 +157,14 @@ app.post('/listrides', (req, res, next) => {
     // for (const property in req.body) {
         // rides[trip_id][property] = req.body[property];
     // }
-    console.log(rides);
-    res.send(rides);
+    let send_rides = rides;
+    for (const property in send_rides)
+    {
+        if (send_rides[property]["space"] == '0')
+            delete send_rides[property];
+    }
+    console.log(send_rides);
+    res.send(send_rides);
 });
 
 roomsJoined = {};
